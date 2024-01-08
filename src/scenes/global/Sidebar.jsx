@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, matchRoutes, useLocation } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -18,20 +18,21 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
+  const location = useLocation();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   return (
     <MenuItem
-      active={selected === title}
+      active={location.pathname == to}
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={() => setSelected(to)}
       icon={icon}
     >
       <Typography>{title}</Typography>
-      {/* <Link to={to} /> */}
+      <Link to={to} />
     </MenuItem>
   );
 };
@@ -40,7 +41,7 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
+  const [selected, setSelected] = useState("/");
 
   return (
     <Box
@@ -50,12 +51,6 @@ const Sidebar = () => {
         },
         "& .pro-icon-wrapper": {
           background: `transparent !important`,
-        },
-        "& .pro-inner-item": {
-          background: `5px 35px 5px 20px !important`,
-        },
-        "& .pro-inner-item:hover": {
-          background: `#868dfb !important`,
         },
         "& .pro-menu-item.active": {
           background: `#6870fa !important`,
